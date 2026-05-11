@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPC Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f10;
+    --surface: #181819;
+    --surface-2: #202022;
+    --surface-3: #2a2a2d;
+    --border: #2e2e32;
+    --border-hover: #444448;
+    --text-primary: #f0eff0;
+    --text-secondary: #888890;
+    --text-muted: #555559;
+    --accent: #c8f261;
+    --accent-dim: #9dbf45;
+    --accent-bg: rgba(200, 242, 97, 0.08);
+    --accent-border: rgba(200, 242, 97, 0.2);
+    --danger: #ff6b6b;
+    --danger-bg: rgba(255, 107, 107, 0.08);
+    --success: #5ce65c;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  html { font-size: 14px; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* Header */
+  .header {
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .header-title span {
+    color: var(--accent);
+  }
+  .header-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 2px;
+  }
+
+  /* Main layout */
+  .main { padding: 2rem 2.5rem; max-width: 1400px; }
+
+  /* Top-level tabs */
+  .top-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 4px;
+    width: fit-content;
+  }
+  .top-tab {
+    padding: 8px 24px;
+    border-radius: var(--radius);
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.01em;
+  }
+  .top-tab:hover { color: var(--text-primary); }
+  .top-tab.active {
+    background: var(--accent);
+    color: #0f0f10;
+    font-weight: 700;
+  }
+
+  /* Section visibility */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Sub tabs */
+  .sub-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+  .sub-tab {
+    padding: 6px 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.04em;
+  }
+  .sub-tab:hover { border-color: var(--border-hover); color: var(--text-primary); }
+  .sub-tab.active {
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+    color: var(--accent);
+  }
+
+  /* Input area */
+  .input-section { margin-bottom: 1.25rem; }
+  .field-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+  textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    resize: vertical;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--accent-border); }
+  textarea::placeholder { color: var(--text-muted); }
+
+  /* Silhouette badges */
+  .sil-section { margin-bottom: 1.25rem; }
+  .sil-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .sil-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .sil-badge b {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Generate button */
+  .generate-btn {
+    padding: 10px 28px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #0f0f10;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: all 0.15s ease;
+  }
+  .generate-btn:hover { background: var(--accent-dim); transform: translateY(-1px); }
+  .generate-btn.copied {
+    background: rgba(92, 230, 92, 0.15);
+    color: var(--success);
+  }
+
+  /* Error & info */
+  .error-msg {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--danger-bg);
+    border: 1px solid rgba(255,107,107,0.2);
+    border-radius: var(--radius);
+    color: var(--danger);
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+  }
+  .info-msg {
+    display: none;
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  /* Output grid */
+  .output-wrap { display: none; margin-top: 1.5rem; }
+  .output-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .out-col { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .out-col-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .out-col-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .out-area {
+    flex: 1;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.8;
+    white-space: pre;
+    overflow: auto;
+    min-height: 240px;
+    max-height: 480px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .out-area:hover { border-color: var(--border-hover); }
+  .out-area.flash {
+    border-color: rgba(92, 230, 92, 0.5);
+    background: rgba(92, 230, 92, 0.04);
+  }
+  .copy-btn {
+    padding: 5px 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #0f0f10;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--accent-dim); }
+  .copy-btn:active { transform: scale(0.97); }
+  .copy-btn.copied {
+    background: rgba(92, 230, 92, 0.15);
+    color: var(--success);
+  }
+  .copy-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* Silhouette toggle */
+  .sil-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 4px;
+    transition: color 0.15s;
+  }
+  .sil-toggle:hover { color: var(--text-secondary); }
+
+  /* Inflow placeholder */
+  .placeholder {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .placeholder-icon { font-size: 2rem; margin-bottom: 1rem; opacity: 0.4; }
+  .placeholder p { font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">UPC <span>Generator</span></div>
+  </div>
+  <div class="header-sub">v1.0 · GS1 &amp; Inflow</div>
+</div>
+
+<div class="main">
+
+  <!-- Top tabs -->
+  <div class="top-tabs">
+    <button class="top-tab active" onclick="switchTab('gs1')">GS1</button>
+    <button class="top-tab" onclick="switchTab('inflow')">Inflow</button>
+  </div>
+
+  <!-- GS1 Section -->
+  <div id="gs1" class="section active">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="switchSub('gs1-main')">GS1</button>
+      <button class="sub-tab" onclick="switchSub('rh-transposed')">RH Transposed</button>
+    </div>
+
+    <!-- GS1 Main -->
+    <div id="gs1-main" class="section active">
+      <div class="input-section">
+        <div class="field-label">Product list — Style Name [tab] Color [tab] Garment Type</div>
+        <textarea id="gs1-input" rows="8" placeholder="WIF MADISON WISCONSIN BIKE FB SST BLU&#9;Royal&#9;Tee
+WIF WISCO BEER TRADITION FB SST CRM&#9;Oatmeal&#9;Tee
+WIF STAY CHEESY WISCO SST GRN&#9;Kelly Green&#9;Tee
+WIF MADISON WISCONSIN BIKE FB SST BLK&#9;Black&#9;Tee"></textarea>
+      </div>
+
+      <div class="sil-section">
+        <button class="sil-toggle" onclick="toggleSil('gs1-sil')">
+          <span>Silhouette map</span>
+          <svg id="gs1-sil-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="gs1-sil" class="sil-grid" style="display:none;margin-top:10px">
+          <div class="sil-badge">Tee → <b>SST</b></div>
+          <div class="sil-badge">High Neck Tank → <b>WTNK</b></div>
+          <div class="sil-badge">Cropped Tee → <b>CROPSST</b></div>
+          <div class="sil-badge">Easy Tee → <b>EASYSST</b></div>
+          <div class="sil-badge">Youth Tee → <b>YSST</b></div>
+          <div class="sil-badge">Hoodie → <b>HDY</b></div>
+          <div class="sil-badge">Crew Sweatshirt → <b>CREW</b></div>
+          <div class="sil-badge">Cropped Crew Sweatshirt → <b>CROPCREW</b></div>
+          <div class="sil-badge">Longsleeve → <b>LS</b></div>
+          <div class="sil-badge">Youth Hoodie → <b>YHDY</b></div>
+          <div class="sil-badge">Pullover Hoodie → <b>WHDY</b></div>
+          <div class="sil-badge">Relaxed Tank → <b>RTNK</b></div>
+        </div>
+      </div>
+
+      <button class="generate-btn" onclick="generate('gs1')">Generate</button>
+      <div class="error-msg" id="gs1-error">Could not parse input. Ensure each row has: Style Name [tab] Color [tab] Garment Type</div>
+      <div class="info-msg" id="gs1-info"></div>
+
+      <div class="output-wrap" id="gs1-output">
+        <div class="output-grid">
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Style name (no size)</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col1" onclick="copyColById('gs1-col1')"></div>
+          </div>
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Style name + size</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col2" onclick="copyColById('gs1-col2')"></div>
+          </div>
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Color (per size)</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col3" onclick="copyColById('gs1-col3')"></div>
+          </div>
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Silhouette (per size)</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col4" onclick="copyColById('gs1-col4')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RH Transposed -->
+    <div id="rh-transposed" class="section">
+      <div class="input-section">
+        <div class="field-label">Paste UPC list — Product Name + Size [tab] UPC, one per line</div>
+        <textarea id="upc-input" rows="10" style="margin-top:6px" placeholder="NJ W BLACK New Jersey Diner design SS TEE XS&#9;196360542721
+NJ W BLACK New Jersey Diner design SS TEE S&#9;196360542738
+NJ W BLACK New Jersey Diner design SS TEE M&#9;196360542745"></textarea>
+      </div>
+      <button class="generate-btn" style="margin-top:12px" onclick="generateUPC()">Transpose</button>
+      <div class="error-msg" id="upc-error">Could not parse input. Each line must be: Product Name + Size [tab] UPC</div>
+      <div class="info-msg" id="upc-info"></div>
+      <div id="upc-output" style="display:none;margin-top:1.5rem">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button class="generate-btn" id="upc-copy-all" onclick="copyUPCAll()" style="display:flex;align-items:center;gap:8px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy all (paste into Excel)
+          </button>
+        </div>
+        <div id="upc-cols" style="display:grid;gap:10px;overflow-x:auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inflow Section -->
+  <div id="inflow" class="section">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="switchSub('dsg')">DSG</button>
+      <button class="sub-tab" onclick="switchSub('rh')">RH</button>
+    </div>
+      <div class="input-section">
+        <div class="field-label">Techpack list — one per line (e.g. WIF26_05_779_4 CIN USA Flag_Gray Tee)</div>
+        <textarea id="inflow-dsg-input" rows="8" placeholder="WIF25_08_1521_5 SATX script _Black Crop top&#9;Black&#9;Cropped Tee
+WIF26_02_314_2 ATL Script_Ash Tank&#9;Ash&#9;High Neck Tank"></textarea>
+      </div>
+      <button class="generate-btn" onclick="generateInflow('dsg')">Generate</button>
+      <div class="error-msg" id="inflow-dsg-error">Could not parse one or more lines. Format must be: [TechpackCode] [Product Name]_[Color] [Cut]</div>
+      <div class="info-msg" id="inflow-dsg-info"></div>
+      <div class="output-wrap" id="inflow-dsg-output">
+        <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Product name</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col1" onclick="copyColById('inflow-dsg-col1')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Size</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col2" onclick="copyColById('inflow-dsg-col2')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Retailer</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col3" onclick="copyColById('inflow-dsg-col3')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Techpack (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col4" onclick="copyColById('inflow-dsg-col4')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Cut (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col5" onclick="copyColById('inflow-dsg-col5')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Color (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-dsg-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-dsg-col6" onclick="copyColById('inflow-dsg-col6')"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RH -->
+    <div id="rh" class="section">
+      <div class="input-section">
+        <div class="field-label">Techpack list — one per line (e.g. WIF26_05_779_4 CIN USA Flag_Gray Tee)</div>
+        <textarea id="inflow-rh-input" rows="8" placeholder="WIF25_08_1521_5 SATX script _Black Crop top&#9;Black&#9;Cropped Tee
+WIF26_02_314_2 ATL Script_Ash Tank&#9;Ash&#9;High Neck Tank"></textarea>
+      </div>
+      <button class="generate-btn" onclick="generateInflow('rh')">Generate</button>
+      <div class="error-msg" id="inflow-rh-error">Could not parse one or more lines. Format must be: [TechpackCode] [Product Name]_[Color] [Cut]</div>
+      <div class="info-msg" id="inflow-rh-info"></div>
+      <div class="output-wrap" id="inflow-rh-output">
+        <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Product name</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col1" onclick="copyColById('inflow-rh-col1')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Size</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col2" onclick="copyColById('inflow-rh-col2')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Retailer</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col3" onclick="copyColById('inflow-rh-col3')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Techpack (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col4" onclick="copyColById('inflow-rh-col4')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Cut (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col5" onclick="copyColById('inflow-rh-col5')"></div>
+        </div>
+          <div class="out-col">
+          <div class="out-col-header">
+            <div class="out-col-label">Color (per size)</div>
+            <button class="copy-btn" onclick="copyCol('inflow-rh-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          </div>
+          <div class="out-area" id="inflow-rh-col6" onclick="copyColById('inflow-rh-col6')"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+const ALL_SIZES = ['XS','S','M','L','XL','XXL'];
+
+function stripSize(name) {
+  // Remove trailing size token if present
+  return name.replace(/\s+(XS|S|M|L|XL|XXL)$/i, '').trim();
+}
+
+function generateUPC() {
+  const raw = document.getElementById('upc-input').value;
+  const errEl = document.getElementById('upc-error');
+  const infoEl = document.getElementById('upc-info');
+  const outEl = document.getElementById('upc-output');
+  errEl.style.display = 'none';
+  infoEl.style.display = 'none';
+
+  const lines = raw.trim().split('\n').filter(l => l.trim());
+  if (!lines.length) { errEl.style.display = 'block'; outEl.style.display = 'none'; return; }
+
+  // Parse each line
+  const entries = [];
+  for (const line of lines) {
+    const parts = line.split('\t');
+    if (parts.length < 2) { errEl.style.display = 'block'; outEl.style.display = 'none'; return; }
+    const fullName = parts[0].trim();
+    const upc = parts[1].trim();
+    // Detect size at end of name
+    const sizeMatch = fullName.match(/\s+(XS|S|M|L|XL|XXL)$/i);
+    const size = sizeMatch ? sizeMatch[1].toUpperCase() : '';
+    const baseName = sizeMatch ? fullName.slice(0, -sizeMatch[0].length).trim() : fullName;
+    entries.push({ fullName, baseName, size, upc });
+  }
+
+  // Group by baseName preserving order
+  const order = [];
+  const groups = {};
+  for (const e of entries) {
+    if (!groups[e.baseName]) { groups[e.baseName] = {}; order.push(e.baseName); }
+    if (e.size) groups[e.baseName][e.size] = e.upc;
+  }
+
+  // Detect which sizes are actually used across all products
+  const usedSizes = ALL_SIZES.filter(s => order.some(name => groups[name][s]));
+
+  // Build columns: product name (display only) + one col per size
+  const colData = {};
+  colData['product'] = { label: 'Product', rows: order.map(n => n) };
+  for (const s of usedSizes) {
+    colData[s] = { label: s, rows: order.map(n => groups[n][s] || '') };
+  }
+
+  // Render columns
+  const colIds = Object.keys(colData);
+  const container = document.getElementById('upc-cols');
+  container.style.gridTemplateColumns = `repeat(${colIds.length}, minmax(120px,1fr))`;
+  container.innerHTML = colIds.map(key => {
+    const col = colData[key];
+    const id = 'upc-col-' + key;
+    const svgCopy = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    return `<div class="out-col">
+      <div class="out-col-header">
+        <div class="out-col-label">${col.label}</div>
+      </div>
+      <div class="out-area" id="${id}" style="cursor:default">${col.rows.join('\n')}</div>
+    </div>`;
+  }).join('');
+
+  // Store raw transposed data for copy-all
+  window._upcTransposed = { order, groups, usedSizes };
+
+  outEl.style.display = 'block';
+  infoEl.textContent = order.length + ' product' + (order.length > 1 ? 's' : '') + ' · sizes: ' + usedSizes.join(', ');
+  infoEl.style.display = 'block';
+}
+
+function copyUPCAll() {
+  const d = window._upcTransposed;
+  if (!d) return;
+  const { order, groups, usedSizes } = d;
+
+  // Build rows: UPCs only, no header, no product names
+  const rows = [];
+  for (const name of order) {
+    const cells = usedSizes.map(s => groups[name][s] || '');
+    rows.push(cells.join('\t'));
+  }
+
+  const text = rows.join('\r\n'); // \r\n for Excel compatibility
+  const btn = document.getElementById('upc-copy-all');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><polyline points="20 6 9 17 4 12"/></svg> Copied — paste into Excel';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy all (paste into Excel)';
+    }, 2500);
+  });
+}
+
+function toggleSil(id) {
+  const grid = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  const open = grid.style.display === 'none';
+  grid.style.display = open ? 'flex' : 'none';
+  arrow.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+const SILHOUETTE_MAP = {
+  'tee': 'SST',
+  'high neck tank': 'WTNK',
+  'cropped tee': 'CROPSST',
+  'easy tee': 'EASYSST',
+  'youth tee': 'YSST',
+  'hoodie': 'HDY',
+  'crew sweatshirt': 'CREW',
+  'cropped crew sweatshirt': 'CROPCREW',
+  'longsleeve': 'LS',
+  'long sleeve': 'LS',
+  'youth hoodie': 'YHDY',
+  'pullover hoodie': 'WHDY',
+  'relaxed tank': 'RTNK'
+};
+
+const SIZE_RANGES = {
+  standard: ['S','M','L','XL','XXL'],
+  cropped:  ['XS','S','M','L','XL'],
+  limited:  ['S','M','L','XL']
+};
+
+const CROPPED_GROUP = ['cropped tee','easy tee','cropped crew sweatshirt','pullover hoodie'];
+const LIMITED_GROUP = ['high neck tank','youth tee','youth hoodie','relaxed tank'];
+
+function getSizes(garment) {
+  const g = garment.toLowerCase().trim();
+  if (CROPPED_GROUP.includes(g)) return SIZE_RANGES.cropped;
+  if (LIMITED_GROUP.includes(g)) return SIZE_RANGES.limited;
+  return SIZE_RANGES.standard;
+}
+
+function getSilhouette(garment) {
+  return SILHOUETTE_MAP[garment.toLowerCase().trim()] || garment.toUpperCase();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.top-tab').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim().toLowerCase() === tab);
+  });
+  document.querySelectorAll('#gs1, #inflow').forEach(s => s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+}
+
+function switchSub(sub) {
+  document.querySelectorAll('.sub-tab').forEach(b => {
+    const id = b.getAttribute('onclick').match(/'([^']+)'/)[1];
+    b.classList.toggle('active', id === sub);
+  });
+  document.querySelectorAll('#gs1-main, #rh-transposed, #dsg, #rh').forEach(s => s.classList.remove('active'));
+  document.getElementById(sub).classList.add('active');
+}
+
+function parseInflowLine(parts) {
+  // parts[0] = full techpack string e.g. "WIF25_08_1521_5 SATX script _Black Crop top"
+  // parts[1] = color e.g. "Black"
+  // parts[2] = cut e.g. "Cropped Tee"
+  const techpackFull = parts[0].trim();
+  const color = parts[1].trim();
+  const cut = parts[2].trim();
+
+  // Extract product name: everything after the first space (skip the code like WIF25_08_1521_5)
+  // then strip the trailing _Color portion
+  const firstSpace = techpackFull.indexOf(' ');
+  if (firstSpace === -1) return null;
+  const afterCode = techpackFull.substring(firstSpace + 1).trim();
+  // afterCode e.g. "SATX script _Black Crop top"
+  // Find last underscore to strip _Color Suffix
+  const underscoreIdx = afterCode.lastIndexOf('_');
+  if (underscoreIdx === -1) return null;
+  const productName = afterCode.substring(0, underscoreIdx).trim();
+
+  return { techpackFull, productName, color, cut };
+}
+
+function generateInflow(retailer) {
+  const prefix = 'inflow-' + retailer;
+  const raw = document.getElementById(prefix + '-input').value;
+  const errEl = document.getElementById(prefix + '-error');
+  const infoEl = document.getElementById(prefix + '-info');
+  const outEl = document.getElementById(prefix + '-output');
+  errEl.style.display = 'none';
+  infoEl.style.display = 'none';
+
+  const lines = raw.trim().split('\n').filter(l => l.trim());
+  if (!lines.length) { errEl.style.display = 'block'; outEl.style.display = 'none'; return; }
+
+  const parsed = lines.map(line => {
+    const parts = line.split('\t').map(p => p.trim()).filter(Boolean);
+    if (parts.length < 3) return null;
+    return parseInflowLine(parts);
+  });
+
+  if (parsed.some(r => r === null)) { errEl.style.display = 'block'; outEl.style.display = 'none'; return; }
+
+  const retailerLabel = retailer.toUpperCase();
+  const col1=[], col2=[], col3=[], col4=[], col5=[], col6=[];
+  let totalLines = 0;
+
+  for (const { techpackFull, productName, color, cut } of parsed) {
+    const sizes = getSizes(cut);
+    for (const size of sizes) {
+      col1.push(retailerLabel + ' ' + productName);
+      col2.push(size);
+      col3.push(retailerLabel);
+      col4.push(techpackFull);
+      col5.push(cut);
+      col6.push(color);
+      totalLines++;
+    }
+  }
+
+  document.getElementById(prefix + '-col1').textContent = col1.join('\n');
+  document.getElementById(prefix + '-col2').textContent = col2.join('\n');
+  document.getElementById(prefix + '-col3').textContent = col3.join('\n');
+  document.getElementById(prefix + '-col4').textContent = col4.join('\n');
+  document.getElementById(prefix + '-col5').textContent = col5.join('\n');
+  document.getElementById(prefix + '-col6').textContent = col6.join('\n');
+  outEl.style.display = 'block';
+  infoEl.textContent = parsed.length + ' product' + (parsed.length > 1 ? 's' : '') + ' → ' + totalLines + ' total rows';
+  infoEl.style.display = 'block';
+}
+
+function parseInput(raw) {
+  const rows = [];
+  const lines = raw.trim().split('\n').filter(l => l.trim());
+  for (const line of lines) {
+    const parts = line.split('\t').map(p => p.trim()).filter(Boolean);
+    if (parts.length >= 3) {
+      rows.push({ style: parts[0], color: parts[1], garment: parts[2] });
+    } else {
+      return null;
+    }
+  }
+  return rows.length ? rows : null;
+}
+
+function generate(prefix) {
+  const raw = document.getElementById(prefix + '-input').value;
+  const errEl = document.getElementById(prefix + '-error');
+  const infoEl = document.getElementById(prefix + '-info');
+  const outEl = document.getElementById(prefix + '-output');
+
+  errEl.style.display = 'none';
+  infoEl.style.display = 'none';
+
+  const rows = parseInput(raw);
+  if (!rows) {
+    errEl.style.display = 'block';
+    outEl.style.display = 'none';
+    return;
+  }
+
+  const col1 = [], col2 = [], col3 = [], col4 = [];
+  let totalLines = 0;
+
+  for (const { style, color, garment } of rows) {
+    const sizes = getSizes(garment);
+    const sil = getSilhouette(garment);
+    for (const size of sizes) {
+      col1.push(style);
+      col2.push(style + ' ' + size);
+      col3.push(color);
+      col4.push(sil);
+      totalLines++;
+    }
+  }
+
+  document.getElementById(prefix + '-col1').textContent = col1.join('\n');
+  document.getElementById(prefix + '-col2').textContent = col2.join('\n');
+  document.getElementById(prefix + '-col3').textContent = col3.join('\n');
+  document.getElementById(prefix + '-col4').textContent = col4.join('\n');
+
+  outEl.style.display = 'block';
+  infoEl.textContent = rows.length + ' product' + (rows.length > 1 ? 's' : '') + ' → ' + totalLines + ' total rows';
+  infoEl.style.display = 'block';
+}
+
+function copyColById(id) {
+  const area = document.getElementById(id);
+  const btn = area.closest('.out-col').querySelector('.copy-btn');
+  copyCol(id, btn);
+}
+
+function copyCol(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
