@@ -437,7 +437,11 @@ NJ W BLACK New Jersey Diner design SS TEE M&#9;196360542745"></textarea>
     <div class="sub-tabs">
       <button class="sub-tab active" onclick="switchSub('dsg')">DSG</button>
       <button class="sub-tab" onclick="switchSub('rh')">RH</button>
+      <button class="sub-tab" onclick="switchSub('ws')">WS</button>
     </div>
+
+    <!-- DSG -->
+    <div id="dsg" class="section active">
       <div class="input-section">
         <div class="field-label">Techpack list — one per line (e.g. WIF26_05_779_4 CIN USA Flag_Gray Tee)</div>
         <textarea id="inflow-dsg-input" rows="8" placeholder="WIF25_08_1521_5 SATX script _Black Crop top&#9;Black&#9;Cropped Tee
@@ -448,48 +452,12 @@ WIF26_02_314_2 ATL Script_Ash Tank&#9;Ash&#9;High Neck Tank"></textarea>
       <div class="info-msg" id="inflow-dsg-info"></div>
       <div class="output-wrap" id="inflow-dsg-output">
         <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Product name</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col1" onclick="copyColById('inflow-dsg-col1')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Size</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col2" onclick="copyColById('inflow-dsg-col2')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Retailer</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col3" onclick="copyColById('inflow-dsg-col3')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Techpack (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col4" onclick="copyColById('inflow-dsg-col4')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Cut (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col5" onclick="copyColById('inflow-dsg-col5')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Color (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-dsg-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-dsg-col6" onclick="copyColById('inflow-dsg-col6')"></div>
-        </div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Product name</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col1" onclick="copyColById('inflow-dsg-col1')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Size</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col2" onclick="copyColById('inflow-dsg-col2')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Retailer</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col3" onclick="copyColById('inflow-dsg-col3')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Techpack (per size)</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col4" onclick="copyColById('inflow-dsg-col4')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Cut (per size)</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col5" onclick="copyColById('inflow-dsg-col5')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Color (per size)</div><button class="copy-btn" onclick="copyCol('inflow-dsg-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-dsg-col6" onclick="copyColById('inflow-dsg-col6')"></div></div>
         </div>
       </div>
     </div>
@@ -506,48 +474,34 @@ WIF26_02_314_2 ATL Script_Ash Tank&#9;Ash&#9;High Neck Tank"></textarea>
       <div class="info-msg" id="inflow-rh-info"></div>
       <div class="output-wrap" id="inflow-rh-output">
         <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Product name</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col1" onclick="copyColById('inflow-rh-col1')"></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Product name</div><button class="copy-btn" onclick="copyCol('inflow-rh-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col1" onclick="copyColById('inflow-rh-col1')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Size</div><button class="copy-btn" onclick="copyCol('inflow-rh-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col2" onclick="copyColById('inflow-rh-col2')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Retailer</div><button class="copy-btn" onclick="copyCol('inflow-rh-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col3" onclick="copyColById('inflow-rh-col3')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Techpack (per size)</div><button class="copy-btn" onclick="copyCol('inflow-rh-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col4" onclick="copyColById('inflow-rh-col4')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Cut (per size)</div><button class="copy-btn" onclick="copyCol('inflow-rh-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col5" onclick="copyColById('inflow-rh-col5')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Color (per size)</div><button class="copy-btn" onclick="copyCol('inflow-rh-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-rh-col6" onclick="copyColById('inflow-rh-col6')"></div></div>
         </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Size</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col2" onclick="copyColById('inflow-rh-col2')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Retailer</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col3" onclick="copyColById('inflow-rh-col3')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Techpack (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col4" onclick="copyColById('inflow-rh-col4')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Cut (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col5" onclick="copyColById('inflow-rh-col5')"></div>
-        </div>
-          <div class="out-col">
-          <div class="out-col-header">
-            <div class="out-col-label">Color (per size)</div>
-            <button class="copy-btn" onclick="copyCol('inflow-rh-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          </div>
-          <div class="out-area" id="inflow-rh-col6" onclick="copyColById('inflow-rh-col6')"></div>
-        </div>
+      </div>
+    </div>
+
+    <!-- WS -->
+    <div id="ws" class="section">
+      <div class="input-section">
+        <div class="field-label">Techpack list — one per line (e.g. WIF26_05_779_4 CIN USA Flag_Gray Tee)</div>
+        <textarea id="inflow-ws-input" rows="8" placeholder="WIF25_08_1521_5 SATX script _Black Crop top&#9;Black&#9;Cropped Tee
+WIF26_02_314_2 ATL Script_Ash Tank&#9;Ash&#9;High Neck Tank"></textarea>
+      </div>
+      <button class="generate-btn" onclick="generateInflow('ws')">Generate</button>
+      <div class="error-msg" id="inflow-ws-error">Could not parse one or more lines. Format must be: [TechpackCode] [Product Name]_[Color] [Cut]</div>
+      <div class="info-msg" id="inflow-ws-info"></div>
+      <div class="output-wrap" id="inflow-ws-output">
+        <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Product name</div><button class="copy-btn" onclick="copyCol('inflow-ws-col1',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col1" onclick="copyColById('inflow-ws-col1')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Size</div><button class="copy-btn" onclick="copyCol('inflow-ws-col2',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col2" onclick="copyColById('inflow-ws-col2')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Retailer</div><button class="copy-btn" onclick="copyCol('inflow-ws-col3',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col3" onclick="copyColById('inflow-ws-col3')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Techpack (per size)</div><button class="copy-btn" onclick="copyCol('inflow-ws-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col4" onclick="copyColById('inflow-ws-col4')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Cut (per size)</div><button class="copy-btn" onclick="copyCol('inflow-ws-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col5" onclick="copyColById('inflow-ws-col5')"></div></div>
+          <div class="out-col"><div class="out-col-header"><div class="out-col-label">Color (per size)</div><button class="copy-btn" onclick="copyCol('inflow-ws-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div><div class="out-area" id="inflow-ws-col6" onclick="copyColById('inflow-ws-col6')"></div></div>
         </div>
       </div>
     </div>
@@ -710,7 +664,7 @@ function switchSub(sub) {
     const id = b.getAttribute('onclick').match(/'([^']+)'/)[1];
     b.classList.toggle('active', id === sub);
   });
-  document.querySelectorAll('#gs1-main, #rh-transposed, #dsg, #rh').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#gs1-main, #rh-transposed, #dsg, #rh, #ws').forEach(s => s.classList.remove('active'));
   document.getElementById(sub).classList.add('active');
 }
 
