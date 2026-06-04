@@ -376,7 +376,7 @@ WIF MADISON WISCONSIN BIKE FB SST BLK&#9;Black&#9;Tee"></textarea>
       <div class="info-msg" id="gs1-info"></div>
 
       <div class="output-wrap" id="gs1-output">
-        <div class="output-grid">
+        <div class="output-grid" style="grid-template-columns:repeat(6,1fr)">
           <div class="out-col">
             <div class="out-col-header">
               <div class="out-col-label">Style name (no size)</div>
@@ -404,6 +404,20 @@ WIF MADISON WISCONSIN BIKE FB SST BLK&#9;Black&#9;Tee"></textarea>
               <button class="copy-btn" onclick="copyCol('gs1-col4',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
             </div>
             <div class="out-area" id="gs1-col4" onclick="copyColById('gs1-col4')"></div>
+          </div>
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Size</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col5',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col5" onclick="copyColById('gs1-col5')"></div>
+          </div>
+          <div class="out-col">
+            <div class="out-col-header">
+              <div class="out-col-label">Gender (per size)</div>
+              <button class="copy-btn" onclick="copyCol('gs1-col6',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+            </div>
+            <div class="out-area" id="gs1-col6" onclick="copyColById('gs1-col6')"></div>
           </div>
         </div>
       </div>
@@ -607,6 +621,16 @@ function copyUPCAll() {
   });
 }
 
+const WOMENS_GROUP = ['high neck tank','cropped tee','easy tee','cropped crew sweatshirt','pullover hoodie','relaxed tank'];
+const YOUTH_GROUP = ['youth tee','youth hoodie'];
+
+function getGender(garment) {
+  const g = garment.toLowerCase().trim();
+  if (YOUTH_GROUP.includes(g)) return 'Youth';
+  if (WOMENS_GROUP.includes(g)) return 'Womens';
+  return 'Unisex';
+}
+
 function toggleSil(id) {
   const grid = document.getElementById(id);
   const arrow = document.getElementById(id + '-arrow');
@@ -768,17 +792,20 @@ function generate(prefix) {
     return;
   }
 
-  const col1 = [], col2 = [], col3 = [], col4 = [];
+  const col1 = [], col2 = [], col3 = [], col4 = [], col5 = [], col6 = [];
   let totalLines = 0;
 
   for (const { style, color, garment } of rows) {
     const sizes = getSizes(garment);
     const sil = getSilhouette(garment);
+    const gender = getGender(garment);
     for (const size of sizes) {
       col1.push(style);
       col2.push(style + ' ' + size);
       col3.push(color);
       col4.push(sil);
+      col5.push(size);
+      col6.push(gender);
       totalLines++;
     }
   }
@@ -787,6 +814,8 @@ function generate(prefix) {
   document.getElementById(prefix + '-col2').textContent = col2.join('\n');
   document.getElementById(prefix + '-col3').textContent = col3.join('\n');
   document.getElementById(prefix + '-col4').textContent = col4.join('\n');
+  document.getElementById(prefix + '-col5').textContent = col5.join('\n');
+  document.getElementById(prefix + '-col6').textContent = col6.join('\n');
 
   outEl.style.display = 'block';
   infoEl.textContent = rows.length + ' product' + (rows.length > 1 ? 's' : '') + ' → ' + totalLines + ' total rows';
